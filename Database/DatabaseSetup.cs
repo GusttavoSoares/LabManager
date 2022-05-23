@@ -26,7 +26,14 @@ class DatabaseSetup
             ram varchar(100) not null,
             processor varchar(100) not null
         );
-        ";
+
+        CREATE TABLE IF NOT EXISTS Labs(
+        id int not null primary key,
+        number int not null,
+        name varchar(100) not null,
+        block varchar (20) not null
+         );
+         ";
 
         command.ExecuteNonQuery();
         connection.Close();
