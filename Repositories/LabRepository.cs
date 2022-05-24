@@ -1,3 +1,4 @@
+using Dapper; 
 using LabManager.Database;
 using LabManager.Models;
 using Microsoft.Data.Sqlite;
@@ -15,27 +16,16 @@ class LabRepository
 
     public List<Lab> GetAll()
     {
-        var connection = new SqliteConnection(databaseConfig.ConnectionString);
+        using var connection = new SqliteConnection(databaseConfig.ConnectionString); // está definindo um escopo no final do qual um objeto será descartado, dessa forma não precisa fechar a conexão
         connection.Open();
-        var command = connection.CreateCommand();
-        command.CommandText = "SELECT * FROM Labs;";
-
-        var reader = command.ExecuteReader();
-
-        var labs = new List<Lab>();
-
-        while (reader.Read())
-        {
-            labs.Add(new Lab(
-                reader.GetInt32(0),
-                reader.GetInt32(1),
-                reader.GetString(2),
-                reader.GetString(3)
-            ));
-        }
-
-        connection.Close();
-        return labs;
-
+        return connection.Query<Lab>("SELECT * FROM Labs;").ToList(); // esse é o getall
     }
+
+    public Lab Save(Lab lab) // recebe os prametros de computer e salva
+    {
+        using var connection = new SqliteConnection(databaseConfig.ConnectionString);
+        connection.Open();
+        connection.Execute("INSERT INTO Labs VALUES(@id, @number, @name, @block);", lab);
+        return lab;
+    }   
 }
