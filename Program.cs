@@ -7,7 +7,6 @@ var databaseConfig = new DatabaseConfig();
 new DatabaseSetup(databaseConfig);
 
 var computerRepository = new ComputerRepository(databaseConfig);
-var labRepository = new LabRepository(databaseConfig);
 
 
 // Routing
@@ -40,38 +39,3 @@ if (modelName == "Computer")
     }
 }
 
-if (modelName == "Lab")
-{
-    if (modelAction == "List")
-    {
-     Console.WriteLine ("Lab List");
-     foreach (var lab in labRepository.GetAll())
-     {
-         Console.WriteLine("{0}, {1}, {2}, {3}", 
-         lab.Id, lab.Number, lab.Name, lab.Block);
-     }
-    } 
-
-    if (modelAction == "New")
-    {
-
-        int id = Convert.ToInt32(args[2]);
-        int number = Convert.ToInt32(args[3]);
-        string name = args[4];
-        string block = args[5];
-
-        var connection = new SqliteConnection("Data Source=database.db");
-        connection.Open();
-
-        var command = connection.CreateCommand();
-        command.CommandText = "INSERT INTO Labs VALUES($id, $number, $name, $block);";
-        command.Parameters.AddWithValue("$id", id);
-        command.Parameters.AddWithValue("$number", number);
-        command.Parameters.AddWithValue("$name", name);
-        command.Parameters.AddWithValue("$block", block);
-        command.ExecuteNonQuery();
-
-        connection.Close();
-    }
-
-}
