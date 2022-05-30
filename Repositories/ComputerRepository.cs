@@ -39,10 +39,9 @@ class ComputerRepository // classe que fala com o banco de dados
         var connection = new SqliteConnection(databaseConfig.ConnectionString);
         connection.Open();
         var command = connection.CreateCommand();
-        String _id = Convert.ToString(id);
 
-        command.Parameters.AddWithValue("@_id", _id);
-        command.CommandText = "SELECT * FROM Computers  WHERE  (id LIKE  @_id);";
+        command.Parameters.AddWithValue("@id", id);
+        command.CommandText = "SELECT * FROM Computers  WHERE  (id LIKE  @id);";
         var reader = command.ExecuteReader(); // executa o texto informado anteriormente
 
         reader.Read();
