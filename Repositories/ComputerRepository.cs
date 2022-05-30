@@ -34,7 +34,26 @@ class ComputerRepository // classe que fala com o banco de dados
         return computers;
     }
 
-    public Computer Save (Computer computer) // recebe os prametros de computer e salva
+    public Computer GetById(int id)
+    {
+        var connection = new SqliteConnection(databaseConfig.ConnectionString);
+        connection.Open();
+        var command = connection.CreateCommand();
+        String _id = Convert.ToString(id);
+
+        command.Parameters.AddWithValue("@_id", _id);
+        command.CommandText = "SELECT * FROM Computers  WHERE  (id LIKE  @_id);";
+        var reader = command.ExecuteReader(); // executa o texto informado anteriormente
+
+        reader.Read();
+        var computer = new Computer(reader.GetInt32(0), reader.GetString(1), reader.GetString(2));
+
+        connection.Close();
+
+        return computer;
+    }
+
+    public Computer Save(Computer computer) // recebe os prametros de computer e salva
     {
         var connection = new SqliteConnection(databaseConfig.ConnectionString);
         connection.Open();
