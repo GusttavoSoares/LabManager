@@ -30,7 +30,6 @@ class ComputerRepository // classe que fala com o banco de dados
         }
 
         connection.Close();
-
         return computers;
     }
 
@@ -42,13 +41,13 @@ class ComputerRepository // classe que fala com o banco de dados
 
         command.Parameters.AddWithValue("@id", id);
         command.CommandText = "SELECT * FROM Computers  WHERE  (id LIKE  @id);";
-        var reader = command.ExecuteReader(); // executa o texto informado anteriormente
+
+        var reader = command.ExecuteReader(); 
 
         reader.Read();
         var computer = new Computer(reader.GetInt32(0), reader.GetString(1), reader.GetString(2));
 
         connection.Close();
-
         return computer;
     }
 
@@ -73,7 +72,6 @@ class ComputerRepository // classe que fala com o banco de dados
         var connection = new SqliteConnection(databaseConfig.ConnectionString);
         connection.Open();
 
-
         var command = connection.CreateCommand();
 
         command.CommandText = "UPDATE Computers SET  ram = $ram, processor = $processor WHERE id=$id;";
@@ -84,6 +82,19 @@ class ComputerRepository // classe que fala com o banco de dados
 
         connection.Close();
         return computer;
+    }
+
+       public void Delete(int id)
+    {
+        var connection = new SqliteConnection(databaseConfig.ConnectionString);
+        connection.Open();
+
+        var command = connection.CreateCommand();
+        command.Parameters.AddWithValue("@id", id);
+        command.CommandText = "DELETE FROM Computers WHERE id=@id;";
+
+        var reader = command.ExecuteReader(); 
+        connection.Close();
     }
 }
 
