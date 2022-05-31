@@ -52,6 +52,7 @@ class ComputerRepository // classe que fala com o banco de dados
         return computer;
     }
 
+
     public Computer Update(Computer computer)
     {
         var connection = new SqliteConnection(databaseConfig.ConnectionString);
@@ -69,6 +70,7 @@ class ComputerRepository // classe que fala com o banco de dados
         connection.Close();
         return computer;
     }
+  
 
     public Computer Save(Computer computer) // recebe os prametros de computer e salva
     {
