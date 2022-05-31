@@ -72,10 +72,6 @@ class ComputerRepository // classe que fala com o banco de dados
         var connection = new SqliteConnection(databaseConfig.ConnectionString);
         connection.Open();
 
-<<<<<<< HEAD
-=======
-
->>>>>>> aef0cef607daf1b1e5e23f15dd6670efce8cd083
         var command = connection.CreateCommand();
 
         command.CommandText = "UPDATE Computers SET  ram = $ram, processor = $processor WHERE id=$id;";
@@ -87,7 +83,6 @@ class ComputerRepository // classe que fala com o banco de dados
         connection.Close();
         return computer;
     }
-<<<<<<< HEAD
 
        public void Delete(int id)
     {
@@ -101,7 +96,5 @@ class ComputerRepository // classe que fala com o banco de dados
         var reader = command.ExecuteReader(); 
         connection.Close();
     }
-=======
->>>>>>> aef0cef607daf1b1e5e23f15dd6670efce8cd083
 }
 
