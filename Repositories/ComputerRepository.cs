@@ -23,10 +23,7 @@ class ComputerRepository // classe que fala com o banco de dados
 
         while (reader.Read()) // preenche uma lista de computadores
         {
-            computers.Add(new Computer(
-             reader.GetInt32(0),
-             reader.GetString(1),
-             reader.GetString(2)));
+            computers.Add(readerToComputer(reader));
         }
 
         connection.Close();
@@ -39,13 +36,13 @@ class ComputerRepository // classe que fala com o banco de dados
         connection.Open();
         var command = connection.CreateCommand();
 
-        command.Parameters.AddWithValue("@id", id);
-        command.CommandText = "SELECT * FROM Computers  WHERE  (id LIKE  @id);";
+        command.CommandText = "SELECT * FROM Computers  WHERE id=$id;";
+        command.Parameters.AddWithValue("$id", id);
 
-        var reader = command.ExecuteReader(); 
+        var reader = command.ExecuteReader();
 
         reader.Read();
-        var computer = new Computer(reader.GetInt32(0), reader.GetString(1), reader.GetString(2));
+        var computer = readerToComputer(reader);
 
         connection.Close();
         return computer;
@@ -84,7 +81,7 @@ class ComputerRepository // classe que fala com o banco de dados
         return computer;
     }
 
-       public void Delete(int id)
+    public void Delete(int id)
     {
         var connection = new SqliteConnection(databaseConfig.ConnectionString);
         connection.Open();
@@ -93,8 +90,24 @@ class ComputerRepository // classe que fala com o banco de dados
         command.Parameters.AddWithValue("@id", id);
         command.CommandText = "DELETE FROM Computers WHERE id=@id;";
 
-        var reader = command.ExecuteReader(); 
+        var reader = command.ExecuteReader();
         connection.Close();
     }
+
+    public bool existsById(int id)
+    {
+        // usar count
+        // count não é listam usar ExecuteScalar() fazer cast para inteiro 0 ou 1
+        // retornar true ou false
+        return false;
+    }
+
+    private Computer readerToComputer(SqliteDataReader reader)
+    {
+        return new Computer
+        (reader.GetInt32(0), reader.GetString(1), reader.GetString(2)
+        );
+    }
+
 }
 
