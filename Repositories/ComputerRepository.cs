@@ -96,10 +96,17 @@ class ComputerRepository // classe que fala com o banco de dados
 
     public bool existsById(int id)
     {
-        // usar count
-        // count não é listam usar ExecuteScalar() fazer cast para inteiro 0 ou 1
-        // retornar true ou false
-        return false;
+         var connection = new SqliteConnection(databaseConfig.ConnectionString);
+        connection.Open();
+
+        var command = connection.CreateCommand();
+
+        command.CommandText = "SELECT COUNT(id) FROM Computers  WHERE id=$id;";
+        command.Parameters.AddWithValue("$id", id);
+        var result = Convert.ToBoolean(command.ExecuteScalar());
+
+        return result;
+
     }
 
     private Computer readerToComputer(SqliteDataReader reader)
