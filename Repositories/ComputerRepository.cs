@@ -11,23 +11,13 @@ class ComputerRepository // classe que fala com o banco de dados
 
     public ComputerRepository(DatabaseConfig databaseConfig) => this.databaseConfig = databaseConfig;
 
-    public List<Computer> GetAll()
+    public IEnumerable<Computer> GetAll()
     {
-        var connection = new SqliteConnection(databaseConfig.ConnectionString);
+        using var connection = new SqliteConnection(databaseConfig.ConnectionString);
         connection.Open();
-        var command = connection.CreateCommand();
-        command.CommandText = "SELECT * FROM Computers;"; // atribuindo o texto a ser executado em command
 
-        var reader = command.ExecuteReader(); // executa o texto informado anteriormente
+        var computers = connection.Query<Computer>("SELECT * FROM Computers");
 
-        var computers = new List<Computer>();
-
-        while (reader.Read()) // preenche uma lista de computadores
-        {
-            computers.Add(readerToComputer(reader));
-        }
-
-        connection.Close();
         return computers;
     }
 
