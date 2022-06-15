@@ -1,6 +1,7 @@
 using LabManager.Database;
 using LabManager.Models;
 using Microsoft.Data.Sqlite;
+using Dapper;
 
 namespace LabManager.Repositories;
 
@@ -50,17 +51,11 @@ class ComputerRepository // classe que fala com o banco de dados
 
     public Computer Save(Computer computer) // recebe os prametros de computer e salva
     {
-        var connection = new SqliteConnection(databaseConfig.ConnectionString);
+        using var connection = new SqliteConnection(databaseConfig.ConnectionString);
         connection.Open();
 
-        var command = connection.CreateCommand();
-        command.CommandText = "INSERT INTO Computers VALUES($id, $ram, $processor);";
-        command.Parameters.AddWithValue("$id", computer.Id);
-        command.Parameters.AddWithValue("$ram", computer.Ram);
-        command.Parameters.AddWithValue("$processor", computer.Processor);
-        command.ExecuteNonQuery();
+        connection.Execute("INSERT INTO Computers VALUES(@Id, @Ram, @Processor)", computer);
 
-        connection.Close();
         return computer;
     }
 
@@ -96,7 +91,7 @@ class ComputerRepository // classe que fala com o banco de dados
 
     public bool existsById(int id)
     {
-         var connection = new SqliteConnection(databaseConfig.ConnectionString);
+        var connection = new SqliteConnection(databaseConfig.ConnectionString);
         connection.Open();
 
         var command = connection.CreateCommand();
