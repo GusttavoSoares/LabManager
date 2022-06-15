@@ -87,8 +87,8 @@ class ComputerRepository // classe que fala com o banco de dados
         connection.Open();
 
         var command = connection.CreateCommand();
-        command.Parameters.AddWithValue("@id", id);
-        command.CommandText = "DELETE FROM Computers WHERE id=@id;";
+        command.Parameters.AddWithValue("$id", id);
+        command.CommandText = "DELETE FROM Computers WHERE id=$id;";
 
         var reader = command.ExecuteReader();
         connection.Close();
