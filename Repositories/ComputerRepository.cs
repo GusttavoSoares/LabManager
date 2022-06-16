@@ -61,19 +61,17 @@ class ComputerRepository // classe que fala com o banco de dados
         connection.Execute("DELETE FROM Computers WHERE id = @Id", new { Id = id });
     }
 
-    public bool existsById(int id)
+    public bool ExistsById(int id)
     {
-        var connection = new SqliteConnection(databaseConfig.ConnectionString);
+        using var connection = new SqliteConnection(databaseConfig.ConnectionString);
         connection.Open();
 
-        var command = connection.CreateCommand();
-
-        command.CommandText = "SELECT COUNT(id) FROM Computers  WHERE id=$id;";
-        command.Parameters.AddWithValue("$id", id);
-        var result = Convert.ToBoolean(command.ExecuteScalar());
-
-        return result;
-
+        var count = connection.ExecuteScalar<int>("SELECT COUNT(Id) FROM Computers  WHERE id=@Id", new {Id = id});
+        
+        if (count > 0)
+            return true;
+        else 
+            return false;
     }
 
     private Computer readerToComputer(SqliteDataReader reader)
