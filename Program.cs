@@ -60,7 +60,7 @@ if (modelName == "Computer")
         if (computerRepository.existsById(id))
             computerRepository.Update(computer);
         else
-            Console.WriteLine($"Comptador com {id} não encontrado");
+            Console.WriteLine($"Computador com id={id} não encontrado");
     }
 
     if (modelAction == "Delete")
@@ -73,7 +73,7 @@ if (modelName == "Computer")
             Console.WriteLine($"Computador {id} deletado.");
         }
         else
-            Console.WriteLine($"Computador com {id} não encontrado");
+            Console.WriteLine($"Computador com id={id} não encontrado");
     }
 }
 
