@@ -60,15 +60,10 @@ class ComputerRepository // classe que fala com o banco de dados
 
     public void Delete(int id)
     {
-        var connection = new SqliteConnection(databaseConfig.ConnectionString);
+        using var connection = new SqliteConnection(databaseConfig.ConnectionString);
         connection.Open();
-
-        var command = connection.CreateCommand();
-        command.Parameters.AddWithValue("$id", id);
-        command.CommandText = "DELETE FROM Computers WHERE id=$id;";
-
-        var reader = command.ExecuteReader();
-        connection.Close();
+       
+        connection.Execute("DELETE FROM Computers WHERE id = @Id", new { Id = id });
     }
 
     public bool existsById(int id)

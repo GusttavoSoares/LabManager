@@ -73,7 +73,7 @@ if (modelName == "Computer")
             Console.WriteLine($"Computador {id} deletado.");
         }
         else
-            Console.WriteLine($"Comptador com {id} não encontrado");
+            Console.WriteLine($"Computador com {id} não encontrado");
     }
 }
 
