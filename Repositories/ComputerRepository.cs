@@ -23,19 +23,11 @@ class ComputerRepository // classe que fala com o banco de dados
 
     public Computer GetById(int id)
     {
-        var connection = new SqliteConnection(databaseConfig.ConnectionString);
+        using var connection = new SqliteConnection(databaseConfig.ConnectionString);
         connection.Open();
-        var command = connection.CreateCommand();
 
-        command.CommandText = "SELECT * FROM Computers  WHERE id=$id;";
-        command.Parameters.AddWithValue("$id", id);
+        var computer = connection.QuerySingle<Computer>("SELECT * FROM Computers Where id = @Id ", new { Id = id });
 
-        var reader = command.ExecuteReader();
-
-        reader.Read();
-        var computer = readerToComputer(reader);
-
-        connection.Close();
         return computer;
     }
 

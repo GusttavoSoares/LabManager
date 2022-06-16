@@ -47,10 +47,7 @@ if (modelName == "Computer")
             Console.WriteLine("{0}, {1}, {2}", computer.Id, computer.Ram, computer.Processor);
         }
         else
-        {
             Console.WriteLine($"O computador com id {id} não existe");
-        }
-
     }
 
     if (modelAction == "Update")
