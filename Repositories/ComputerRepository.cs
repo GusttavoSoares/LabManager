@@ -68,17 +68,8 @@ class ComputerRepository // classe que fala com o banco de dados
 
         var count = connection.ExecuteScalar<int>("SELECT COUNT(Id) FROM Computers  WHERE id=@Id", new {Id = id});
         
-        if (count > 0)
-            return true;
-        else 
-            return false;
-    }
-
-    private Computer readerToComputer(SqliteDataReader reader)
-    {
-        return new Computer
-        (reader.GetInt32(0), reader.GetString(1), reader.GetString(2)
-        );
+        return  count > 0;
+     
     }
 
 }
