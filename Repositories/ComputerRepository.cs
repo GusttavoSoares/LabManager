@@ -66,9 +66,9 @@ class ComputerRepository // classe que fala com o banco de dados
         using var connection = new SqliteConnection(databaseConfig.ConnectionString);
         connection.Open();
 
-        var count = connection.ExecuteScalar<int>("SELECT COUNT(Id) FROM Computers  WHERE id=@Id", new {Id = id});
+        var count = connection.ExecuteScalar<Boolean>("SELECT COUNT(Id) FROM Computers  WHERE id=@Id", new {Id = id});
         
-        return  count > 0;
+        return  count;
      
     }
 
