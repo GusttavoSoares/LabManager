@@ -33,9 +33,16 @@ if (modelName == "Computer")
         string ram = args[3];
         string processor = args[4];
 
+        if (computerRepository.ExistsById(id))
+        {
+            Console.WriteLine($"Computador com id {id} já existe");
+        }
+        else 
+        {
         var computer = new Computer(id, ram, processor);
         computerRepository.Save(computer);
         Console.WriteLine("{0}, {1}, {2}", computer.Id, computer.Ram, computer.Processor);
+        }
     }
 
     if (modelAction == "Show")
