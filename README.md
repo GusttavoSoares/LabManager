@@ -1,6 +1,5 @@
 # Lab Managrer
 
 ````
-dotnet add package Microsoft.Data.Sqlite
-dotnet add package dapper
+dotnet add package MySql.EntityFrameworkCore
 ````
