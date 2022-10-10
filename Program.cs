@@ -1,87 +1,44 @@
-﻿using LabManager.Database;
-using Microsoft.Data.Sqlite;
-using LabManager.Repositories;
-using LabManager.Models;
+﻿using LabManager.Models;
 
-var databaseConfig = new DatabaseConfig();
-new DatabaseSetup(databaseConfig);
+Console.WriteLine("Hello, World!");
 
-var computerRepository = new ComputerRepository(databaseConfig);
+SystemContext context = new SystemContext();
+context.Database.EnsureCreated();
 
+Computer c1 = new Computer(1, "16gb", "i7");
+context.Computers.Add(c1);
+context.SaveChanges();
 
-// Routing
-var modelName = args[0];
-var modelAction = args[1];
+Computer c2 = new Computer(2, "2gb", "i3");
+context.Computers.Add(c2);
 
+Computer c3 = new Computer(3, "2gb", "i3");
+context.Computers.Add(c3);
+context.SaveChanges();
 
+IEnumerable<Computer> computers = context.Computers;
 
-if (modelName == "Computer")
+foreach (var item in computers)
 {
-    if (modelAction == "List")
-    {
-        Console.WriteLine("Computer List");
-        foreach (var computer in computerRepository.GetAll()) // var = lista de computers
-        {
-            Console.WriteLine("{0}, {1}, {2}", computer.Id, computer.Ram, computer.Processor);
-        }
-    }
-
-    if (modelAction == "New")
-    {
-
-        int id = Convert.ToInt32(args[2]);
-        string ram = args[3];
-        string processor = args[4];
-
-        if (computerRepository.ExistsById(id))
-        {
-            Console.WriteLine($"Computador com id {id} já existe");
-        }
-        else 
-        {
-        var computer = new Computer(id, ram, processor);
-        computerRepository.Save(computer);
-        Console.WriteLine("{0}, {1}, {2}", computer.Id, computer.Ram, computer.Processor);
-        }
-    }
-
-    if (modelAction == "Show")
-    {
-        int id = Convert.ToInt32(args[2]);
-        if (computerRepository.ExistsById(id))
-        {
-            var computer = computerRepository.GetById(id);
-            Console.WriteLine("{0}, {1}, {2}", computer.Id, computer.Ram, computer.Processor);
-        }
-        else
-            Console.WriteLine($"O computador com id {id} não existe");
-    }
-
-    if (modelAction == "Update")
-    {
-        int id = Convert.ToInt32(args[2]);
-        string ram = args[3];
-        string processor = args[4];
-
-        var computer = new Computer(id, ram, processor);
-        if (computerRepository.ExistsById(id))
-            computerRepository.Update(computer);
-        else
-            Console.WriteLine($"Computador com id={id} não encontrado");
-    }
-
-    if (modelAction == "Delete")
-    {
-        int id = Convert.ToInt32(args[2]);
-
-        if (computerRepository.ExistsById(id))
-        {
-            computerRepository.Delete(id);
-            Console.WriteLine($"Computador {id} deletado.");
-        }
-        else
-            Console.WriteLine($"Computador com id={id} não encontrado");
-    }
+    Console.WriteLine($"{item.Id}, {item.Ram}, {item.Processor}");
 }
 
+Computer encontrado = context.Computers.Find(2);
+Console.WriteLine($"{encontrado.Id}, {encontrado.Ram}, {encontrado.Processor}");
 
+encontrado.Ram = "20GB";
+encontrado.Processor = "amd";
+context.Computers.Update(encontrado);
+context.SaveChanges();
+
+Console.WriteLine(context.Computers.Find(2));
+
+context.Computers.Remove(encontrado);
+context.SaveChanges();
+
+computers = context.Computers;
+
+foreach (var item in computers)
+{
+    Console.WriteLine($"{item.Id}, {item.Ram}, {item.Processor}");
+}
